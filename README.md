@@ -179,6 +179,6 @@ Per maggiori dettagli sulla licenza, consulta il file [LICENSE](LICENSE).
 ## Collegamenti utili
 - **Repository GitHub**: [https://github.com/Nomarexe](https://github.com/Nomarexe)
 - **Licenza MIT**: [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
-- **Documentazione completa**: [https://github.com/Nomarexe/NR-Project-Dynamic-Python-Server](https://github.com/Nomarexe/NR-Project-Dynamic-Python-Server)
+- **Documentazione completa**: [https://github.com/Nomarexe/NR-Cloud/tree/main](https://github.com/Nomarexe/NR-Cloud/tree/main)
 
 Copyright (c) 2025 Nomar.exe
