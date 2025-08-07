@@ -1,0 +1,116 @@
+/* Utility CSS for text styles, spacing, separators, and opacity animations */
+
+/* Text styles */
+.bold {
+  font-weight: 700 !important;
+}
+
+.underline {
+  text-decoration: underline !important;
+}
+
+.italic {
+  font-style: italic !important;
+}
+
+/* Visual separator */
+.visual-separator {
+  border: none;
+  border-top: 2px solid var(--cololr-separator);
+  margin: 1.5rem 0;
+  width: 100%;
+  opacity: var(--color-separator-opacity);
+}
+
+/* Margin utilities */
+.m-0 {
+  margin: 0 !important;
+}
+.m-1 {
+  margin: 0.25rem !important;
+}
+.m-2 {
+  margin: 0.5rem !important;
+}
+.m-3 {
+  margin: 1rem !important;
+}
+.m-4 {
+  margin: 1.5rem !important;
+}
+.m-5 {
+  margin: 3rem !important;
+}
+
+/* Padding utilities */
+.p-0 {
+  padding: 0 !important;
+}
+.p-1 {
+  padding: 0.25rem !important;
+}
+.p-2 {
+  padding: 0.5rem !important;
+}
+.p-3 {
+  padding: 1rem !important;
+}
+.p-4 {
+  padding: 1.5rem !important;
+}
+.p-5 {
+  padding: 3rem !important;
+}
+
+/* Opacity animation */
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.opacity-animation {
+  opacity: 0.2;
+  transform: scale(0.98);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.opacity-animation:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* testi colorati a tema  */
+.text-primary {
+  color: var(--color-primary);
+}
+.text-secondary {
+  color: var(--color-secondary);
+}
+.text-tertiary {
+  color: var(--color-tertiary);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+.text-muted {
+  color: var(--color-muted);
+}
+.text-highlight {
+  color: var(--color-highlight);
+}
+.text-error {
+  color: var(--color-error);
+}
+.text-success {
+  color: var(--color-success);
+}
+.text-warning {
+  color: var(--color-warning);
+}
+.text-info {
+  color: var(--color-info);
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NR Project Dynamic Python Server - Hub</title>
+
+  
+<!-- Favicon standard -->
+<link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+
+<!-- Per altri browser che supportano PNG -->
+<link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
+    
+  
+
+  <link rel="stylesheet" href="src/assets/styles/reset.css" />
+  <link rel="stylesheet" href="src/assets/styles/main.css" />
+  <link rel="stylesheet" href="src/assets/styles/utility.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
+      <nav>
+        <a href="index.html" class="active" aria-current="page">Home</a>
+        <a href="video.html">Video</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="audio.html">Audio</a>
+        <a href="documents.html">Documenti</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" role="main">
+
+  <section aria-label="Hub Section" class="Hub-container" style="max-width: 900px; width: 100%; margin: 2rem auto;">
+
+<h1>Benvenuti al NR Cloud </h1>
+<p>
+Questo e un progetto di servizzio cloud che permette di caricare e visualizzare file multimediali come immagini, video e audio in modo dinamico. Il progetto è realizzato con Python e utilizza un server web per gestire le richieste e servire i contenuti.
+</p>
+<hr class="visual-separator marginbotton-xs" />
+<div class="Hub-description">
+<p>
+Il progetto è progettato per essere semplice e intuitivo, permettendo agli utenti di caricare file nelle rispettive cartelle (Galleria, Video, Audio) e visualizzarli automaticamente senza la necessità di ricaricare manualmente la pagina.
+Il server e impostato nella porta 8080 e può essere avviato con il comando <code>python3 server.py</code>. Una volta avviato, puoi accedere al servizio tramite il tuo browser all'indirizzo <code><a>http://localhost:8080</a></code>.
+</p>
+</div>
+<hr class="visual-separator marginbotton-xs" />
+<h2>Esplora le sezioni:</h2>
+<ul>
+  <li><a href="gallery.html">Galleria di immagini</a> - Una raccolta di immagini e video che si aggiorna automaticamente quando carichi nuovi file nella cartella "Galleria".</li>
+  <li><a href="video.html">Video</a> - Sezione video dinamica che si aggiorna automaticamente quando carichi nuovi file nella cartella "Video".</li>
+  <li><a href="audio.html">Audio</a> - Sezione audio che si aggiorna automaticamente con i file caricati nella cartella "Audio".</li>
+  <li><a href="documents.html">Documenti</a> - Sezione documenti per visualizzare e gestire file PDF, DOCX, TXT, SVG e altri formati.</li>
+</ul>
+</section>
+
+  </main>
+</body>
+<!-- footer -->
+ <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
+</html>

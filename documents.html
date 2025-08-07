@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Documenti - NR Cloud</title>
+  
+  <!-- Favicon standard -->
+  <link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
+
+  <link rel="stylesheet" href="src/assets/styles/reset.css" />
+  <link rel="stylesheet" href="src/assets/styles/main.css" />
+  <link rel="stylesheet" href="src/assets/styles/utility.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="video.html">Video</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="audio.html">Audio</a>
+        <a href="documents.html" class="active" aria-current="page">Documenti</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main>
+    <div class="container">
+      <h1>Documenti</h1>
+      
+      <section class="documents-section" aria-label="Sezione Documenti">
+        <div class="documents-grid" id="documents-container">
+          <!-- Documenti verranno caricati dinamicamente -->
+        </div>
+        
+        <div class="documents-empty-state" id="empty-state" style="display: none;">
+          <h2>Nessun documento trovato</h2>
+          <p>Carica i tuoi documenti nella cartella "Documents" per visualizzarli qui.</p>
+        </div>
+      </section>
+
+      <hr class="visual-separator marginbotton-xs" />
+      
+      <div class="documents-description">
+        <h2>Benvenuti nella sezione Documenti</h2>
+        <p>
+          Qui puoi visualizzare e gestire tutti i tuoi documenti. Il sistema supporta vari formati 
+          come PDF, DOCX, TXT, SVG, e molti altri. I documenti vengono caricati automaticamente 
+          dalla cartella "Documents".
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="src/assets/js/documents.js"></script>
+  <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
+</body>
+</html>
