@@ -318,3 +318,104 @@ footer a:hover {
 /* Removed opacity animation keyframes and animation properties for smooth transition on hover */
 
 /* opacity-animation class removed and moved to utility.css */
+
+/* Documents Section Styles */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.document-card {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.3s ease;
+  color: var(--color-text);
+}
+
+.document-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.9);
+}
+
+.document-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  align-self: center;
+  stroke: var(--color-primary);
+}
+
+.document-info {
+  flex-grow: 1;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.document-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+.document-type {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin-bottom: 0.25rem;
+}
+
+.document-size {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.document-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.document-actions .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.document-actions .btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.document-actions .btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.document-actions .btn-secondary {
+  background-color: #444444;
+  color: var(--color-text);
+}
+
+.document-actions .btn-secondary:hover {
+  background-color: #666666;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #660000;
+  border: 1px solid #ff4d4d;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  color: #ff9999;
+  margin-top: 1rem;
+}

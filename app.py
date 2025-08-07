@@ -7,6 +7,7 @@ app = Flask(__name__, static_folder='')
 VIDEO_DIR = 'Video'
 GALLERY_DIR = 'Galleria'  # Folder containing gallery images and videos
 AUDIO_DIR = 'Audio'  # Folder containing audio files
+DOCUMENTS_DIR = 'Documents'  # Folder containing documents
 
 def extract_title(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -23,6 +24,52 @@ def serve_index_html():
     return render_template_string(content)
 
 # Articles endpoints removed - replaced with video section
+
+@app.route('/api/documents')
+def list_documents():
+    """List all documents from the Documents folder"""
+    try:
+        if not os.path.exists(DOCUMENTS_DIR):
+            return jsonify([])
+        
+        files = sorted(os.listdir(DOCUMENTS_DIR))
+        # Supported document formats
+        supported_extensions = {
+            '.pdf': 'PDF',
+            '.docx': 'DOCX',
+            '.doc': 'DOC',
+            '.txt': 'TXT',
+            '.svg': 'SVG',
+            '.png': 'PNG',
+            '.jpg': 'JPG',
+            '.jpeg': 'JPEG',
+            '.gif': 'GIF',
+            '.bmp': 'BMP',
+            '.webp': 'WEBP'
+        }
+        
+        documents = []
+        for filename in files:
+            file_path = os.path.join(DOCUMENTS_DIR, filename)
+            if os.path.isfile(file_path):
+                file_ext = os.path.splitext(filename)[1].lower()
+                if file_ext in supported_extensions:
+                    file_size = os.path.getsize(file_path)
+                    documents.append({
+                        'name': filename,
+                        'type': supported_extensions[file_ext],
+                        'url': f"/{DOCUMENTS_DIR}/{filename}",
+                        'size': file_size
+                    })
+        
+        return jsonify(documents)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/Documents/<path:filename>')
+def serve_document_file(filename):
+    """Serve document files from the Documents folder"""
+    return send_from_directory(DOCUMENTS_DIR, filename)
 
 @app.route('/api/gallery')
 def list_gallery_media():
