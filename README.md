@@ -1,4 +1,4 @@
-# NR Progetto Dinamic Python Server
+# NR Cloud
 
 Questo progetto è un server web Python dinamico, sviluppato con Flask, che gestisce un sito web multimediale completo con galleria, video, audio e documenti. Il marchio "NR Project Dynamic Python Server" è presente in tutte le pagine.
 
