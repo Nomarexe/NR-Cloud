@@ -27,18 +27,69 @@ Per far funzionare NR Cloud hai bisogno di:
 - Scarica questa cartella sul tuo computer
 - Ricordati dove l'hai salvata (es. Desktop/NR-Cloud)
 
-### Passo 2: Installa Python
-- Se non hai Python, segui le istruzioni sopra per il tuo sistema
+### Passo 2: Installa Python e le dipendenze
+**Copia e incolla questi comandi nel terminale:**
+
+```bash
+# Installa Python (se non lo hai già)
+# Windows: scarica da https://www.python.org/downloads/
+# Mac/Linux: Python è già installato o installalo con:
+# sudo apt-get install python3 python3-pip  # Ubuntu/Debian
+# brew install python3                     # macOS
+
+# Installa le dipendenze
+pip install flask
+# Oppure se hai il file requirements.txt:
+pip install -r requirements.txt
+```
 
 ### Passo 3: Avvia il servizio
-1. **Windows**: 
-   - Apri il file `setup_instructions.sh` e segui le istruzioni
-   - Oppure apri il terminale nella cartella e scrivi: `python app.py`
+**Copia e incolla questi comandi nel terminale:**
 
-2. **Mac/Linux**:
-   - Apri il terminale
-   - Vai nella cartella: `cd /percorso/della/cartella`
-   - Scrivi: `python3 app.py`
+```bash
+# Vai nella cartella del progetto
+cd /percorso/della/cartella/NR-Cloud
+
+# Avvia il server
+# Windows:
+python app.py
+
+# Mac/Linux:
+python3 app.py
+
+# Per usare una porta diversa (esempio: 8081)
+python app.py 8081
+```
+
+### Comandi rapidi per l'installazione
+
+**Installazione completa in un solo comando:**
+
+```bash
+# Clona o scarica il progetto
+git clone https://github.com/tuo-username/NR-Cloud.git
+cd NR-Cloud
+
+# Installa le dipendenze
+pip install -r requirements.txt
+
+# Avvia il server
+python app.py
+```
+
+**Installazione manuale passo-passo:**
+
+```bash
+# 1. Scarica il progetto
+# 2. Entra nella cartella
+cd NR-Cloud
+
+# 3. Installa Flask
+pip install flask
+
+# 4. Avvia il server
+python app.py
+```
 
 ## Come usare NR Cloud
 
@@ -83,8 +134,57 @@ R: Sì, se il computer principale è acceso e sulla stessa rete WiFi.
 **D: I miei file sono al sicuro?**
 R: Sì, rimangono sempre sul tuo computer.
 
-## Hai bisogno di aiuto?
-Se hai problemi, apri una "Issue" su GitHub o contatta l'autore del progetto.
+## Struttura del progetto
+```
+NR-Cloud/
+├── app.py              # Server Python principale
+├── index.html          # Pagina principale
+├── gallery.html        # Pagina galleria foto
+├── video.html          # Pagina video
+├── audio.html          # Pagina audio
+├── documents.html      # Pagina documenti
+├── src/                # Risorse frontend
+│   ├── assets/
+│   │   ├── js/         # JavaScript
+│   │   └── styles/     # CSS
+│   └── ...
+├── Galleria/           # Cartella foto
+├── Video/              # Cartella video
+├── Audio/              # Cartella musica
+├── Documents/          # Cartella documenti
+└── ...
+```
+
+## Tecnologie utilizzate
+- **Backend**: Python Flask
+- **Frontend**: HTML5, CSS3, JavaScript ES6+
+- **Librerie**: 
+  - Flask (server web)
+  - Jinja2 (template engine)
+  - Bootstrap (UI framework)
+
+## Contributi
+Le contribuzioni sono benvenute! Per contribuire:
+1. Fai un fork del progetto
+2. Crea un branch per la tua feature (`git checkout -b feature/AmazingFeature`)
+3. Fai commit delle tue modifiche (`git commit -m 'Add some AmazingFeature'`)
+4. Push al branch (`git push origin feature/AmazingFeature`)
+5. Apri una Pull Request
+
+## Licenza
+Questo progetto è distribuito con licenza MIT. Vedi il file `LICENSE` per maggiori dettagli.
+
+## Ringraziamenti
+- Grazie alla community open source per le librerie utilizzate
+- Ringraziamenti speciali a tutti i contributori del progetto
+
+## Changelog
+### v1.0.0 (2024)
+- Prima versione stabile
+- Supporto per foto, video, audio e documenti
+- Interfaccia responsive
+- Sistema di caricamento file drag & drop
 
 ---
+
 **Creato da Nomar.exe**
