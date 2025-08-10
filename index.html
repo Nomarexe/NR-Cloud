@@ -4,63 +4,263 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NR Project Dynamic Python Server - Hub</title>
-
   
-<!-- Favicon standard -->
-<link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-
-<!-- Per altri browser che supportano PNG -->
-<link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
-    
-  
+  <!-- Favicon -->
+  <link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
 
   <link rel="stylesheet" href="src/assets/styles/reset.css" />
   <link rel="stylesheet" href="src/assets/styles/main.css" />
   <link rel="stylesheet" href="src/assets/styles/utility.css" />
+  <style>
+    /* Stili per la sezione di setup iniziale */
+    .setup-container {
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: #1e1e1e;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .setup-container h1 {
+      color: #8868f3;
+      margin-bottom: 1.5rem;
+    }
+
+    .setup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: white;
+    }
+
+    .setup-btn {
+      padding: 0.75rem;
+      background: #8868f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .setup-btn:hover {
+      background: #9a7dff;
+    }
+
+    /* Stili per la sezione normale */
+    .normal-content {
+      display: none; /* Inizialmente nascosto */
+    }
+
+    /* Stili per il logout */
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ff6b6b;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(255, 107, 107, 0.1);
+    }
+
+    .user-controls {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .username {
+      color: #8868f3;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="container">
       <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
-      <nav>
-        <a href="index.html" class="active" aria-current="page">Home</a>
-        <a href="video.html">Video</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="audio.html">Audio</a>
-        <a href="documents.html">Documenti</a>
+      <nav id="main-nav">
+        <!-- Dinamico in base allo stato -->
       </nav>
     </div>
   </header>
+
   <main class="container" role="main">
+    <!-- Sezione di setup iniziale (visibile solo se non esiste users.txt) -->
+    <div id="setup-section" class="setup-container">
+      <h1>Configurazione Iniziale</h1>
+      <p>Benvenuto in NR Cloud! Crea il tuo account amministratore.</p>
+      <form id="setup-form" class="setup-form">
+        <div class="form-group">
+          <label for="setup-username">Username</label>
+          <input type="text" id="setup-username" required>
+        </div>
+        <div class="form-group">
+          <label for="setup-password">Password</label>
+          <input type="password" id="setup-password" required>
+        </div>
+        <button type="submit" class="setup-btn">Crea Account</button>
+      </form>
+      <div id="setup-message" style="margin-top: 1rem; color: #ff6b6b;"></div>
+    </div>
 
-  <section aria-label="Hub Section" class="Hub-container" style="max-width: 900px; width: 100%; margin: 2rem auto;">
-
-<h1>Benvenuti al NR Cloud </h1>
-<p>
-Questo e un progetto di servizzio cloud che permette di caricare e visualizzare file multimediali come immagini, video e audio in modo dinamico. Il progetto è realizzato con Python e utilizza un server web per gestire le richieste e servire i contenuti.
-</p>
-<hr class="visual-separator marginbotton-xs" />
-<div class="Hub-description">
-<p>
-Il progetto è progettato per essere semplice e intuitivo, permettendo agli utenti di caricare file nelle rispettive cartelle (Galleria, Video, Audio) e visualizzarli automaticamente senza la necessità di ricaricare manualmente la pagina.
-Il server e impostato nella porta 8080 e può essere avviato con il comando <code>python3 server.py</code>. Una volta avviato, puoi accedere al servizio tramite il tuo browser all'indirizzo <code><a>http://localhost:8080</a></code>.
-</p>
-</div>
-<hr class="visual-separator marginbotton-xs" />
-<h2>Esplora le sezioni:</h2>
-<ul>
-  <li><a href="gallery.html">Galleria di immagini</a> - Una raccolta di immagini e video che si aggiorna automaticamente quando carichi nuovi file nella cartella "Galleria".</li>
-  <li><a href="video.html">Video</a> - Sezione video dinamica che si aggiorna automaticamente quando carichi nuovi file nella cartella "Video".</li>
-  <li><a href="audio.html">Audio</a> - Sezione audio che si aggiorna automaticamente con i file caricati nella cartella "Audio".</li>
-  <li><a href="documents.html">Documenti</a> - Sezione documenti per visualizzare e gestire file PDF, DOCX, TXT, SVG e altri formati.</li>
-</ul>
-</section>
-
+    <!-- Sezione normale (visibile dopo il login) -->
+    <div id="normal-section" class="normal-content">
+      <section aria-label="Hub Section" class="Hub-container" style="max-width: 900px; width: 100%; margin: 2rem auto;">
+        <h1>Benvenuti al NR Cloud</h1>
+        <p>
+          Questo è un progetto di servizio cloud che permette di caricare e visualizzare file multimediali come immagini, video e audio in modo dinamico.
+        </p>
+        <hr class="visual-separator marginbotton-xs" />
+        <div class="Hub-description">
+          <p>
+            Il server è impostato nella porta 8080 e può essere avviato con il comando <code>python3 server.py</code>.
+          </p>
+        </div>
+        <hr class="visual-separator marginbotton-xs" />
+        <h2>Esplora le sezioni:</h2>
+        <ul>
+          <li><a href="gallery.html">Galleria di immagini</a></li>
+          <li><a href="video.html">Video</a></li>
+          <li><a href="audio.html">Audio</a></li>
+          <li><a href="documents.html">Documenti</a></li>
+        </ul>
+      </section>
+    </div>
   </main>
+
+  <footer>NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a></footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Controlla lo stato del sistema
+      checkSystemStatus();
+      
+      // Gestione del form di setup
+      const setupForm = document.getElementById('setup-form');
+      if (setupForm) {
+        setupForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const username = document.getElementById('setup-username').value;
+          const password = document.getElementById('setup-password').value;
+          
+          if (username && password) {
+            createAdminAccount(username, password);
+          } else {
+            document.getElementById('setup-message').textContent = 'Inserisci username e password';
+          }
+        });
+      }
+    });
+
+    function checkSystemStatus() {
+      fetch('/api/check-session')
+        .then(response => response.json())
+        .then(data => {
+          const setupSection = document.getElementById('setup-section');
+          const normalSection = document.getElementById('normal-section');
+          const navElement = document.getElementById('main-nav');
+          
+          if (data.requiresSetup) {
+            // Mostra solo la sezione di setup
+            if (setupSection) setupSection.style.display = 'block';
+            if (normalSection) normalSection.style.display = 'none';
+            if (navElement) navElement.innerHTML = '';
+          } else if (data.loggedIn) {
+            // Mostra la sezione normale con logout
+            if (setupSection) setupSection.style.display = 'none';
+            if (normalSection) normalSection.style.display = 'block';
+            if (navElement) {
+              navElement.innerHTML = `
+                <a href="index.html" class="active" aria-current="page">Home</a>
+                <a href="video.html">Video</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="audio.html">Audio</a>
+                <a href="documents.html">Documenti</a>
+                <div class="user-controls">
+                  <span class="username">${data.username}</span>
+                  <a href="/logout" class="logout-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                  </a>
+                </div>
+              `;
+            }
+          } else {
+            // Mostra la sezione normale con login
+            if (setupSection) setupSection.style.display = 'none';
+            if (normalSection) normalSection.style.display = 'block';
+            if (navElement) {
+              navElement.innerHTML = `
+                <a href="video.html">Video</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="audio.html">Audio</a>
+                <a href="documents.html">Documenti</a>
+                <a href="/login" style="color: #8868f3;">Login</a>
+              `;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error checking system status:', error);
+        });
+    }
+
+    function createAdminAccount(username, password) {
+      fetch('/complete-setup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href = '/login';
+        } else {
+          document.getElementById('setup-message').textContent = 'Errore durante la creazione dell\'account';
+        }
+      })
+      .catch(error => {
+        document.getElementById('setup-message').textContent = 'Errore di connessione';
+        console.error('Error:', error);
+      });
+    }
+  </script>
 </body>
-<!-- footer -->
- <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
 </html>

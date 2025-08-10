@@ -1,122 +1,210 @@
 /**
- * Documents Section JavaScript
- * Handles dynamic loading and display of documents from the Documents folder
+ * documents.js
+ * Gestione dinamica dei documenti con layout griglia tipo galleria
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadDocuments();
-});
+class DocumentManager {
+  constructor() {
+    this.documents = [];
+    this.filteredDocuments = [];
+    this.currentFilter = '';
+    this.currentType = 'all';
+    this.isLoading = false;
 
-/**
- * Load documents from the Documents folder
- */
-async function loadDocuments() {
-    const container = document.getElementById('documents-container');
-    const emptyState = document.getElementById('empty-state');
-    
-    try {
-        // Fetch the list of documents from the server
-        const response = await fetch('/api/documents');
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch documents');
-        }
-        
-        const documents = await response.json();
-        
-        if (documents.length === 0) {
-            emptyState.style.display = 'block';
-            container.style.display = 'none';
-            return;
-        }
-        
-        // Clear existing content
-        container.innerHTML = '';
-        
-        // Render each document
-        documents.forEach(doc => {
-            const docElement = createDocumentElement(doc);
-            container.appendChild(docElement);
-        });
-        
-    } catch (error) {
-        console.error('Error loading documents:', error);
-        showErrorMessage('Errore nel caricamento dei documenti');
-    }
-}
+    this.init();
+  }
 
-/**
- * Create HTML element for a document
- * @param {Object} doc - Document object with name, type, url, size
- * @returns {HTMLElement} - Document card element
- */
-function createDocumentElement(doc) {
-    const card = document.createElement('div');
-    card.className = 'document-card';
-    
-    const icon = getDocumentIcon(doc.type);
-    const formattedSize = formatFileSize(doc.size);
-    
-    card.innerHTML = `
-        <div class="document-icon">
-            ${icon}
-        </div>
-        <div class="document-info">
-            <h3 class="document-title">${doc.name}</h3>
-            <p class="document-type">${doc.type.toUpperCase()}</p>
-            <p class="document-size">${formattedSize}</p>
-        </div>
-        <div class="document-actions">
-            <a href="${doc.url}" class="btn btn-primary" target="_blank" rel="noopener">
-                Visualizza
-            </a>
-            <button class="btn btn-secondary" onclick="downloadDocument('${doc.url}', '${doc.name}')">
-                Scarica
-            </button>
-        </div>
+  init() {
+    document.addEventListener('DOMContentLoaded', () => {
+      this.createFilterUI();
+      this.loadDocuments();
+    });
+  }
+
+  createFilterUI() {
+    const container = document.querySelector('main');
+    if (!container) return;
+
+    const filterContainer = document.createElement('div');
+    filterContainer.className = 'documents-filter';
+    filterContainer.style.marginBottom = '2rem';
+    filterContainer.innerHTML = `
+      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <input type="text" 
+               class="filter-input" 
+               id="search-input" 
+               placeholder="Cerca documenti..."
+               aria-label="Cerca documenti"
+               style="flex: 1; min-width: 200px; padding: 0.5rem; border-radius: 4px; border: 1px solid #444; background: #1e1e1e; color: var(--color-text);">
+        <select class="filter-select" id="type-filter" aria-label="Filtra per tipo"
+                style="padding: 0.5rem; border-radius: 4px; border: 1px solid #444; background: #1e1e1e; color: var(--color-text);">
+          <option value="all">Tutti i tipi</option>
+          <option value="pdf">PDF</option>
+          <option value="docx">Word</option>
+          <option value="txt">Testo</option>
+          <option value="xlsx">Excel</option>
+          <option value="pptx">PowerPoint</option>
+        </select>
+        <button class="btn btn-secondary" onclick="documentManager.refreshDocuments()" aria-label="Ricarica"
+                style="padding: 0.5rem 1rem; border-radius: 4px; border: none; background: var(--color-primary); color: white; cursor: pointer;">
+          Ricarica
+        </button>
+      </div>
     `;
-    
+
+    const documentsGrid = document.querySelector('.documents-grid');
+    if (documentsGrid) {
+      container.insertBefore(filterContainer, documentsGrid);
+    }
+
+    const searchInput = document.getElementById('search-input');
+    const typeFilter = document.getElementById('type-filter');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.filterDocuments(e.target.value, typeFilter?.value || 'all');
+      });
+    }
+
+    if (typeFilter) {
+      typeFilter.addEventListener('change', (e) => {
+        this.filterDocuments(searchInput?.value || '', e.target.value);
+      });
+    }
+  }
+
+  async loadDocuments() {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+    this.showLoadingState();
+
+    try {
+      const documents = await this.fetchDocuments();
+      this.documents = documents;
+      this.filteredDocuments = documents;
+
+      if (documents.length === 0) {
+        this.showEmptyState();
+        return;
+      }
+
+      this.renderDocuments();
+
+    } catch (error) {
+      console.error('Error loading documents:', error);
+      this.showErrorMessage('Errore nel caricamento dei documenti');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async fetchDocuments() {
+    try {
+      const res = await fetch('/api/documents');
+      if (!res.ok) throw new Error('Errore risposta server');
+      const documents = await res.json();
+
+      return documents.filter(doc => doc.exists !== false);
+    } catch (err) {
+      console.error('Errore fetchDocuments:', err);
+      return [];
+    }
+  }
+
+  filterDocuments(searchTerm, typeFilter) {
+    this.currentFilter = searchTerm.toLowerCase();
+    this.currentType = typeFilter;
+
+    this.filteredDocuments = this.documents.filter(doc => {
+      const matchesSearch = doc.name.toLowerCase().includes(this.currentFilter) ||
+        (doc.description && doc.description.toLowerCase().includes(this.currentFilter));
+      const matchesType = this.currentType === 'all' || doc.type === this.currentType;
+
+      return matchesSearch && matchesType;
+    });
+
+    this.renderDocuments();
+  }
+
+  renderDocuments() {
+    const container = document.querySelector('.documents-grid');
+    const emptyState = document.getElementById('empty-state');
+
+    if (!container) return;
+
+    if (this.filteredDocuments.length === 0) {
+      this.showEmptyState();
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    container.innerHTML = '';
+
+    this.filteredDocuments.forEach((doc, index) => {
+      const docElement = this.createDocumentElement(doc, index);
+      container.appendChild(docElement);
+    });
+  }
+
+  createDocumentElement(doc, index) {
+    const card = document.createElement('div');
+    card.className = 'document-item opacity-animation';
+    card.style.animationDelay = `${index * 0.1}s`;
+
+    const icon = this.getDocumentIcon(doc.type);
+    const formattedSize = this.formatFileSize(doc.size);
+    const formattedDate = this.formatDate(doc.date);
+
+    card.innerHTML = `
+      <div class="document-icon">${icon}</div>
+      <div class="document-title" title="${doc.name}">${this.truncateText(doc.name, 25)}</div>
+      <div class="document-type">${doc.type.toUpperCase()}</div>
+      <div class="document-size">${formattedSize}</div>
+      <div class="document-actions">
+        <a href="${doc.url}" class="btn btn-primary" target="_blank" rel="noopener">Visualizza</a>
+        <button class="btn btn-secondary" onclick="documentManager.downloadDocument('${doc.url}', '${doc.name}')">
+          Scarica
+        </button>
+      </div>
+    `;
     return card;
-}
+  }
 
-/**
- * Get appropriate icon for document type
- * @param {string} type - File extension/type
- * @returns {string} - SVG icon HTML
- */
-function getDocumentIcon(type) {
+  getDocumentIcon(type) {
     const icons = {
-        'pdf': '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-        'docx': '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-        'txt': '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#95a5a6" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-        'svg': '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f39c12" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="12" cy="12" r="3"/><path d="M16 21l-4-4-4 4"/></svg>',
-        'default': '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7f8c8d" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+      'pdf': 'pdf',
+      'docx': 'docx',
+      'txt': 'txt',
+      'xlsx': 'xlsx',
+      'pptx': 'pptx',
+      'default': 'documento'
     };
-    
     return icons[type.toLowerCase()] || icons.default;
-}
+  }
 
-/**
- * Format file size in human readable format
- * @param {number} bytes - File size in bytes
- * @returns {string} - Formatted size string
- */
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    
+  formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  }
 
-/**
- * Download document
- * @param {string} url - Document URL
- * @param {string} filename - Document filename
- */
-function downloadDocument(url, filename) {
+  formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('it-IT', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  truncateText(text, maxLength) {
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+
+  downloadDocument(url, filename) {
+    if (url === '#') {
+      alert('Download non disponibile');
+      return;
+    }
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
@@ -124,29 +212,51 @@ function downloadDocument(url, filename) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
+  }
 
-/**
- * Show error message
- * @param {string} message - Error message to display
- */
-function showErrorMessage(message) {
-    const container = document.getElementById('documents-container');
+  showLoadingState() {
+    const container = document.querySelector('.documents-grid');
+    if (!container) return;
     container.innerHTML = `
-        <div class="error-message">
-            <h3>Errore</h3>
-            <p>${message}</p>
-            <button onclick="loadDocuments()" class="btn btn-primary">Riprova</button>
-        </div>
+      <div class="empty-state">
+        <div style="font-size: 2rem;">📁</div>
+        <p>Caricamento documenti...</p>
+      </div>
     `;
+  }
+
+  showEmptyState() {
+    const container = document.querySelector('.documents-grid');
+    const emptyState = document.getElementById('empty-state');
+    if (!container || !emptyState) return;
+    
+    container.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size: 3rem;">📁</div>
+        <h2>Nessun documento trovato</h2>
+        <p>Carica i tuoi documenti nella cartella "Documents" per visualizzarli qui.</p>
+      </div>
+    `;
+  }
+
+  showErrorMessage(message) {
+    const container = document.querySelector('.documents-grid');
+    if (!container) return;
+    container.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size: 2rem;"> (TwT) </div>
+        <h3>Errore</h3>
+        <p>${message}</p>
+        <button onclick="documentManager.refreshDocuments()" class="btn btn-primary" style="padding: 0.5rem 1rem; border-radius: 4px; border: none; background: var(--color-primary); color: white; cursor: pointer;">
+          Riprova
+        </button>
+      </div>
+    `;
+  }
+
+  refreshDocuments() {
+    this.loadDocuments();
+  }
 }
 
-/**
- * Refresh documents list
- */
-function refreshDocuments() {
-    loadDocuments();
-}
-
-// Add refresh functionality
-window.refreshDocuments = refreshDocuments;
+window.documentManager = new DocumentManager();

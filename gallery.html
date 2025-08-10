@@ -3,44 +3,205 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gallery - NR   Space</title>
-  
-  <!-- Favicon standard -->
-  <link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
-
+  <title>Gallery - NR Space</title>
+  <link rel="icon" type="image/svg+xml" href="src/assets/icons/favicon-32x32.svg" />
   <link rel="stylesheet" href="src/assets/styles/reset.css" />
   <link rel="stylesheet" href="src/assets/styles/main.css" />
   <link rel="stylesheet" href="src/assets/styles/utility.css" />
+  <style>
+    /* Stili esistenti mantenuti */
+    .upload-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px dashed #007acc;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover {
+      border-color: #0056b3;
+      background-color: rgba(0, 122, 204, 0.05);
+    }
+    
+    /* ... (tutti gli stili esistenti rimangono invariati) ... */
+
+    /* Gallery Grid Styles */
+    .gallery-grid {
+      column-count: 3;
+      column-gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--color-shadow);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      display: block;
+      background-color: #1e1e1e;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
+
+    .gallery-item img, 
+    .gallery-item video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Nuovi stili per il sistema di login */
+    .user-controls {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .username {
+      color: #8868f3;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ff6b6b;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(255, 107, 107, 0.1);
+      text-decoration: none;
+    }
+
+    .logout-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .logout-btn:hover svg {
+      transform: translateX(2px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .gallery-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid {
+        column-count: 1;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+      }
+      
+      .user-controls {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(136, 104, 243, 0.2);
+      }
+    }
+
+    /* Empty state styling */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-muted);
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
+    <div class="container">
+      <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
       <nav>
-        <a href="index.html">Home</a>
         <a href="video.html">Video</a>
         <a href="gallery.html" class="active" aria-current="page">Gallery</a>
         <a href="audio.html">Audio</a>
-        <a href="documents.html">Documenti</a>
+        <a href="documents.html">Documenti-</a>
+        <div class="user-controls">
+          <span class="username" id="username-display"></span>
+          <a href="/logout" class="logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+          </a>
+        </div>
       </nav>
+    </div>
   </header>
+
   <main>
     <h1>Gallery</h1>
+    
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="upload-area" id="upload-area-gallery">
+        <div class="upload-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </div>
+        <p class="upload-text">Trascina i file immagini e video qui o <span class="upload-link">clicca per selezionare</span></p>
+        <input type="file" id="file-input-gallery" multiple class="file-input" accept="image/*,video/*">
+      </div>
+      <div class="upload-progress" id="upload-progress-gallery" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill-gallery"></div>
+        </div>
+        <span class="progress-text" id="progress-text-gallery">0%</span>
+      </div>
+      <div class="upload-results" id="upload-results-gallery"></div>
+    </div>
+
     <div class="gallery-grid" aria-label="Gallery of images">
       <!-- Gallery items will be dynamically loaded here -->
     </div>
-
-    <hr class="visual-separator marginbotton-xs" />
-    <div class="gallery-description">
-      <p>
-Benvenuti alla Galleria NR Cloud! Qui potete esplorare una raccolta di immagini che implementa anchde i video e le animazioni.
-      </p>
-    </div>
   </main>
+
   <script src="src/assets/js/gallery.js"></script>
-  <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
+  <script src="src/assets/js/upload.js"></script>
+  <script>
+    // Mostra il nome utente dopo il login
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/check-session')
+        .then(response => response.json())
+        .then(data => {
+          if(data.loggedIn && data.username) {
+            document.getElementById('username-display').textContent = data.username;
+          }
+        })
+        .catch(error => console.error('Error checking session:', error));
+    });
+  </script>
+  
+  <footer>NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a></footer>
 </body>
 </html>
