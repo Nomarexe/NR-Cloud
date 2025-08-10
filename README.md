@@ -53,7 +53,7 @@ python app.py
 - Se la cartella è sul Desktop: `cd Desktop/MediaServer`
 - Poi: `python app.py`
 
-## 📱 Come Usarlo
+##  Come Usarlo
 
 ### Dal Computer:
 1. Apri il browser (Chrome, Firefox, Safari)
@@ -65,7 +65,7 @@ python app.py
 2. Apri il browser
 3. Vai all'indirizzo che appare nel terminale (es. `http://192.168.1.100:8080`)
 
-## 📁 Dove Mettere i File
+##  Dove Mettere i File
 
 Il progetto ha già le cartelle pronte:
 - **Video/** - metti qui film e video
@@ -73,7 +73,7 @@ Il progetto ha già le cartelle pronte:
 - **Galleria/** - metti qui foto e immagini
 - **Documents/** - metti qui PDF, Word, Excel, ecc.
 
-## 🔧 Problemi Comuni e Soluzioni
+##  Problemi Comuni e Soluzioni
 
 **"python non è riconosciuto"**
 - Riavvia il computer dopo aver installato Python
