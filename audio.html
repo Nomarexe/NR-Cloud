@@ -4,43 +4,189 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Audio - NR Space</title>
-  
-  <!-- Favicon standard -->
-  <link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
-
+  <link rel="icon" type="image/svg+xml" href="src/assets/icons/favicon-32x32.svg" />
   <link rel="stylesheet" href="src/assets/styles/reset.css" />
   <link rel="stylesheet" href="src/assets/styles/main.css" />
   <link rel="stylesheet" href="src/assets/styles/utility.css" />
+  <style>
+    .upload-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px dashed #007acc;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover {
+      border-color: #0056b3;
+      background-color: rgba(0, 122, 204, 0.05);
+    }
+    
+    .upload-area {
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-area.drag-over {
+      background-color: rgba(0, 122, 204, 0.1);
+      border-color: #0056b3;
+    }
+    
+    .upload-icon {
+      margin-bottom: 1rem;
+      color: #007acc;
+    }
+    
+    .upload-text {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .upload-link {
+      color: #007acc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    .upload-link:hover {
+      color: #0056b3;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .upload-progress {
+      margin-top: 1rem;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #007acc;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .upload-results {
+      margin-top: 1rem;
+    }
+    
+    .upload-result {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .upload-result.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .upload-result.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Audio Grid Styles - Gallery-like layout */
+    .audio-grid {
+      column-count: 3;
+      column-gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .audio-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--color-shadow);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      display: block;
+      background-color: #1e1e1e;
+      padding: 1rem;
+    }
+
+    .audio-item:hover {
+      transform: scale(1.05);
+    }
+
+    .audio-item audio {
+      width: 100%;
+      display: block;
+    }
+
+    .audio-title {
+      color: var(--color-text);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .audio-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .audio-grid {
+        column-count: 1;
+      }
+    }
+
+    /* Empty state styling */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-muted);
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
       <nav>
-        <a href="index.html">Home</a>
+        <a href="audio.html" class="active" aria-current="page">Audio</a>
         <a href="video.html">Video</a>
         <a href="gallery.html">Gallery</a>
-        <a href="audio.html" class="active" aria-current="page">Audio</a>
         <a href="documents.html">Documenti</a>
       </nav>
   </header>
   <main>
-    <h1>Audio</h1>
-    <div class="audio-list" aria-label="Audio files list">
-      <!-- Audio items will be dynamically loaded here -->
-    </div>
+    <h1>Audio Gallery</h1>
+    
+    <!-- Container for dynamic upload section -->
+    <div class="audio-list"></div>
 
-    <hr class="visual-separator marginbotton-xs" />
-    <div class="audio-description">
-      <p>
-        Benvenuti alla sezione Audio di NR Cloud! Qui potete ascoltare una raccolta di file audio aggiornati automaticamente.
-      </p>
+    <div class="audio-grid" aria-label="Gallery of audio files">
+      <!-- Audio items will be dynamically loaded here -->
     </div>
   </main>
   <script src="src/assets/js/audio.js"></script>
+  <script src="src/assets/js/upload.js"></script>
   <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
 </body>
 </html>

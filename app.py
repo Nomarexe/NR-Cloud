@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, send_from_directory, render_template_string, request
 import os
 import re
+import logging
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__, static_folder='')
 
@@ -8,6 +10,21 @@ VIDEO_DIR = 'Video'
 GALLERY_DIR = 'Galleria'  # Folder containing gallery images and videos
 AUDIO_DIR = 'Audio'  # Folder containing audio files
 DOCUMENTS_DIR = 'Documents'  # Folder containing documents
+
+# Allowed file extensions for uploads
+ALLOWED_EXTENSIONS = {
+    'audio': {'mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a'},
+    'video': {'mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'},
+    'documents': {'pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'},
+    'gallery': {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'mp4', 'webm', 'ogg'}
+}
+
+def allowed_file(filename, category):
+    """Check if file extension is allowed for the given category"""
+    if '.' not in filename:
+        return False
+    ext = filename.rsplit('.', 1)[1].lower()
+    return ext in ALLOWED_EXTENSIONS.get(category, set())
 
 def extract_title(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -123,11 +140,62 @@ def serve_video_file(filename):
 def serve_audio_file(filename):
     return send_from_directory(AUDIO_DIR, filename)
 
+# Upload endpoints
+@app.route('/api/upload/<category>', methods=['POST'])
+def upload_file(category):
+    """Handle file uploads for different categories"""
+    try:
+        if category not in ['audio', 'video', 'documents', 'gallery']:
+            return jsonify({"success": False, "error": "Invalid category"}), 400
+        
+        if 'file' not in request.files:
+            return jsonify({"success": False, "error": "No file provided"}), 400
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"success": False, "error": "No file selected"}), 400
+        
+        if file and allowed_file(file.filename, category):
+            filename = secure_filename(file.filename)
+            
+            # Determine target directory based on category
+            target_dir = {
+                'audio': AUDIO_DIR,
+                'video': VIDEO_DIR,
+                'documents': DOCUMENTS_DIR,
+                'gallery': GALLERY_DIR
+            }.get(category)
+            
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            
+            file_path = os.path.join(target_dir, filename)
+            
+            # Check if file already exists
+            if os.path.exists(file_path):
+                base, ext = os.path.splitext(filename)
+                counter = 1
+                while os.path.exists(file_path):
+                    filename = f"{base}_{counter}{ext}"
+                    file_path = os.path.join(target_dir, filename)
+                    counter += 1
+            
+            file.save(file_path)
+            return jsonify({"success": True, "filename": filename})
+        else:
+            return jsonify({"success": False, "error": "File type not allowed"}), 400
+            
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 if __name__ == '__main__':
     import sys
     import threading
     import requests
     import time
+
+    # Suppress the development server warning
+    logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
     port = 8080  # qui e dove puoi cambiare la porta predefinita
     if len(sys.argv) > 1:

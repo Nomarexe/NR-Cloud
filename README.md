@@ -1,90 +1,99 @@
-# NR Cloud - Il tuo spazio multimediale personale 📁
+#  Media Server - Guida per Tutti
 
-## Cos'è NR Cloud?
-NR Cloud è un servizio cloud personale che ti permette di organizzare e condividere i tuoi file multimediali (foto, video, musica, documenti) in modo semplice e veloce.
+**Cos'è questo progetto?**
+È come avere il tuo Netflix/Dropbox personale sul computer. Puoi vedere video, ascoltare musica, guardare foto e leggere documenti da qualsiasi dispositivo (telefono, tablet, altro computer) connesso alla tua stessa rete WiFi.
 
-## Cosa puoi fare con NR Cloud?
--  **Galleria**: Carica e visualizza le tue foto
--  **Video**: Guarda i tuoi video preferiti
--  **Audio**: Ascolta la tua musica
--  **Documenti**: Visualizza PDF, Word, e altri documenti
+##  Cosa Puoi Fare
+- **Guardare film e video** dal telefono/tablet mentre stai sul divano
+- **Ascoltare musica** senza dover copiare file
+- **Guardare le tue foto** su schermo grande
+- **Leggere PDF e documenti** da qualsiasi dispositivo
+- **Caricare nuovi file** semplicemente trascinandoli
 
-## Requisiti minimi per il tuo computer
-Per far funzionare NR Cloud hai bisogno di:
+##  Cosa Serve (Requisiti Semplici)
 
-### 1. Python (obbligatorio)
-- **Windows**: Scarica da [python.org](https://www.python.org/downloads/)
-- **Mac**: Apri il terminale e scrivi: `python3 --version`
-  - Se non è installato, scaricalo da [python.org](https://www.python.org/downloads/)
-- **Linux**: Apri il terminale e scrivi: `python3 --version`
+### Per Windows:
+1. **Python** (obbligatorio) - vai su [python.org](https://www.python.org) e scarica la versione più recente
+2. Durante l'installazione spunta  "Add Python to PATH"
 
-### 2. Internet (opzionale)
-- Serve solo se vuoi accedere ai tuoi file da altri dispositivi
+### Per Mac:
+1. **Python** (obbligatorio) - vai su [python.org](https://www.python.org) o apri il terminale e scrivi:
+   ```
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   brew install python
+   ```
 
-## Installazione in 3 semplici passi
+### Per Linux:
+1. **Python** è già installato, ma se non lo è:
+   ```
+   sudo apt install python3 python3-pip
+   ```
 
-### Passo 1: Scarica il progetto
-- Scarica questa cartella sul tuo computer
-- Ricordati dove l'hai salvata (es. Desktop/NR-Cloud)
+##  Come Farlo Funzionare (3 Passi Facili)
 
-### Passo 2: Installa Python
-- Se non hai Python, segui le istruzioni sopra per il tuo sistema
+### 1. Scarica i File
+- Scarica tutta la cartella del progetto sul tuo computer
+- Mettila dove vuoi (es. Desktop o Documenti)
 
-### Passo 3: Avvia il servizio
-1. **Windows**: 
-   - Apri il file `setup_instructions.sh` e segui le istruzioni
-   - Oppure apri il terminale nella cartella e scrivi: `python app.py`
+### 2. Installa le Cose Necessarie
+Apri il terminale (o Command Prompt su Windows) e scrivi:
+```
+pip install flask werkzeug
+```
+Aspetta che finisca (ci mette 1-2 minuti)
 
-2. **Mac/Linux**:
-   - Apri il terminale
-   - Vai nella cartella: `cd /percorso/della/cartella`
-   - Scrivi: `python3 app.py`
+### 3. Avvia il Server
+Sempre nel terminale, vai nella cartella del progetto:
+```
+cd /percorso/della/cartella
+python app.py
+```
 
-## Come usare NR Cloud
+**Esempio pratico:**
+- Se la cartella è sul Desktop: `cd Desktop/MediaServer`
+- Poi: `python app.py`
 
-### Una volta avviato:
-1. Apri il tuo browser (Chrome, Firefox, Safari, Edge)
-2. Vai all'indirizzo: `http://localhost:8080`
-3. Inizia a caricare i tuoi file nelle cartelle:
-   - **Galleria**: Metti le tue foto in `/Galleria/`
-   - **Video**: Metti i tuoi video in `/Video/`
-   - **Audio**: Metti la tua musica in `/Audio/`
-   - **Documenti**: Metti i tuoi documenti in `/Documents/`
+## 📱 Come Usarlo
 
-### Caricare nuovi file:
-- Copia e incolla i file nelle cartelle corrispondenti
-- Il sito si aggiorna automaticamente, non serve ricaricare la pagina
+### Dal Computer:
+1. Apri il browser (Chrome, Firefox, Safari)
+2. Vai su: `http://127.0.0.1:8080`
+3. Vedrai il tuo archivio multimediale
 
-## Risoluzione problemi
+### Dal Telefono/Tablet:
+1. Assicurati che sia connesso alla stessa WiFi del computer
+2. Apri il browser
+3. Vai all'indirizzo che appare nel terminale (es. `http://192.168.1.100:8080`)
 
-### "Python non trovato"
-- Assicurati di aver installato Python correttamente
-- Riavvia il computer dopo l'installazione
+## 📁 Dove Mettere i File
 
-### "Porta 8080 occupata"
-- Il programma ti dirà automaticamente se c'è un problema
-- Puoi cambiare porta scrivendo: `python app.py 8081`
+Il progetto ha già le cartelle pronte:
+- **Video/** - metti qui film e video
+- **Audio/** - metti qui musica e podcast
+- **Galleria/** - metti qui foto e immagini
+- **Documents/** - metti qui PDF, Word, Excel, ecc.
 
-### Non riesco ad accedere da altri dispositivi
-- Assicurati che il computer principale sia acceso
-- Controlla che il firewall permetta le connessioni sulla porta 8080
+## 🔧 Problemi Comuni e Soluzioni
 
-## Domande frequenti
+**"python non è riconosciuto"**
+- Riavvia il computer dopo aver installato Python
+- Su Windows: prova `py` invece di `python`
 
-**D: Devo pagare qualcosa?**
-R: No, è completamente gratuito e open source.
+**"Non riesco ad accedere dal telefono"**
+- Controlla che telefono e computer siano sulla stessa WiFi
+- Disattiva temporaneamente il firewall
 
-**D: Funziona senza internet?**
-R: Sì, funziona perfettamente offline sul tuo computer.
+**"La porta 8080 è occupata"**
+- Chiudi altri programmi o usa: `python app.py 8081`
 
-**D: Posso accedere dai miei dispositivi?**
-R: Sì, se il computer principale è acceso e sulla stessa rete WiFi.
+##  Consigli Utili
+- Puoi cambiare porta: `python app.py 3000`
+- Per chiudere il server: premi `CTRL+C` nel terminale
+- I file vengono caricati automaticamente - non serve riavviare
 
-**D: I miei file sono al sicuro?**
-R: Sì, rimangono sempre sul tuo computer.
+##  Se Non Funziona
+1. Controlla che Python sia installato: apri terminale e scrivi `python --version`
+2. Controlla che Flask sia installato: `pip show flask`
+3. Se hai Mac M1/M2: potresti dover usare `python3` invece di `python`
 
-## Hai bisogno di aiuto?
-Se hai problemi, apri una "Issue" su GitHub o contatta l'autore del progetto.
-
----
-**Creato da Nomar.exe**
+**Hai bisogno di aiuto?** Scrivi l'errore esatto che vedi nel terminale e ccerca un video su youtube se non riesci.

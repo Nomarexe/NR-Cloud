@@ -3,63 +3,402 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Documenti - NR Cloud</title>
-  
-  <!-- Favicon standard -->
-  <link rel="icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="src/assets/favicon-package/favicon.ico" type="image/x-icon">
-  <link rel="icon" type="image/png" sizes="16x16" href="src/assets/favicon-package/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="src/assets/favicon-package/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="src/assets/favicon-package/favicon-48x48.png">
-
+  <title>Documenti - NR Space</title>
+  <link rel="icon" type="image/svg+xml" href="src/assets/icons/favicon-32x32.svg" />
   <link rel="stylesheet" href="src/assets/styles/reset.css" />
   <link rel="stylesheet" href="src/assets/styles/main.css" />
   <link rel="stylesheet" href="src/assets/styles/utility.css" />
+  <style>
+    .upload-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px dashed #007acc;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover {
+      border-color: #0056b3;
+      background-color: rgba(0, 122, 204, 0.05);
+    }
+    
+    .upload-area {
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-area.drag-over {
+      background-color: rgba(0, 122, 204, 0.1);
+      border-color: #0056b3;
+    }
+    
+    .upload-icon {
+      margin-bottom: 1rem;
+      color: #007acc;
+    }
+    
+    .upload-text {
+      font-size: 1.1rem;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .upload-link {
+      color: #007acc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    .upload-link:hover {
+      color: #0056b3;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .upload-progress {
+      margin-top: 1rem;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #007acc;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+    
+    .upload-results {
+      margin-top: 1rem;
+    }
+    
+    .upload-result {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .upload-result.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .upload-result.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Document Grid Styles - Gallery-like layout */
+    .documents-grid {
+      column-count: 3;
+      column-gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .document-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--color-shadow);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      display: block;
+      background-color: #1e1e1e;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .document-item:hover {
+      transform: scale(1.05);
+    }
+
+    .document-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+      stroke: var(--color-primary);
+    }
+
+    .document-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+      word-break: break-word;
+    }
+
+    .document-type {
+      font-size: 0.9rem;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .document-size {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-bottom: 1rem;
+    }
+
+    .document-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .document-actions .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .document-actions .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-text);
+    }
+
+    .document-actions .btn-primary:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .document-actions .btn-secondary {
+      background-color: #444444;
+      color: var(--color-text);
+    }
+
+    .document-actions .btn-secondary:hover {
+      background-color: #666666;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .documents-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .documents-grid {
+        column-count: 1;
+      }
+    }
+
+    /* Empty state styling */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-muted);
+      font-size: 1.2rem;
+    }
+
+    /* Upload section styling */
+    .upload-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      border: 2px dashed #007acc;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover {
+      border-color: #0056b3;
+      background-color: rgba(0, 122, 204, 0.05);
+    }
+    
+    .upload-area {
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .upload-area.drag-over {
+      background-color: rgba(0, 122, 204, 0.1);
+      border-color: #0056b3;
+    }
+    
+    .upload-icon {
+      margin-bottom: 1rem;
+      color: #007acc;
+    }
+    
+    .upload-text {
+      font-size: 1.1rem;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .upload-link {
+      color: #007acc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    .upload-link:hover {
+      color: #0056b3;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .upload-progress {
+      margin-top: 1rem;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #007acc;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-text {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+    
+    .upload-results {
+      margin-top: 1rem;
+    }
+    
+    .upload-result {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .upload-result.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .upload-result.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Header styling */
+    header {
+      background-color: var(--color-header-bg);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: var(--color-primary);
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    nav a.active {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="video.html">Video</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="audio.html">Audio</a>
-        <a href="documents.html" class="active" aria-current="page">Documenti</a>
-      </nav>
-    </div>
+    <div class="logo"><span style="font-weight:bold; color:#007acc;">NR</span>Cloud</div>
+    <nav>
+      <a href="documents.html" class="active" aria-current="page">Documenti</a>
+      <a href="video.html">Video</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="audio.html">Audio</a>
+      
+    </nav>
   </header>
-  
+
   <main>
     <h1>Documenti</h1>
-    <div class="container">
-      
-      
-      <section class="documents-section" aria-label="Sezione Documenti">
-        <div class="documents-grid" id="documents-container">
-          <!-- Documenti verranno caricati dinamicamente -->
-        </div>
-        
-        <div class="documents-empty-state" id="empty-state" style="display: none;">
-          <h2>Nessun documento trovato</h2>
-          <p>Carica i tuoi documenti nella cartella "Documents" per visualizzarli qui.</p>
-        </div>
-      </section>
 
-      <hr class="visual-separator marginbotton-xs" />
-      
-      <div class="documents-description">
-        <h2>Benvenuti nella sezione Documenti</h2>
-        <p>
-          Qui puoi visualizzare e gestire tutti i tuoi documenti. Il sistema supporta vari formati 
-          come PDF, DOCX, TXT, SVG, e molti altri. I documenti vengono caricati automaticamente 
-          dalla cartella "Documents".
-        </p>
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="upload-area" id="upload-area-documents">
+        <div class="upload-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </div>
+        <p class="upload-text">Trascina i file documenti qui o <span class="upload-link">clicca per selezionare</span></p>
+        <input type="file" id="file-input-documents" multiple class="file-input" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx">
       </div>
+      <div class="upload-progress" id="upload-progress-documents" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill-documents"></div>
+        </div>
+        <span class="progress-text" id="progress-text-documents">0%</span>
+      </div>
+      <div class="upload-results" id="upload-results-documents"></div>
+    </div>
+
+    <div class="documents-grid" aria-label="Gallery of documents">
+      <!-- Document items will be dynamically loaded here -->
+    </div>
+
+    <div id="empty-state" style="display:none; margin-top: 1rem; color: #666;">
+      <p>Nessun documento trovato. Carica i tuoi documenti nella cartella.</p>
     </div>
   </main>
 
+  <footer>
+    NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a>
+  </footer>
+
   <script src="src/assets/js/documents.js"></script>
-  <footer> NR Cloud 2025 made by <a href="https://github.com/Nomarexe">Nomar.exe</a> </footer>
+  <script src="src/assets/js/upload.js"></script>
 </body>
 </html>
