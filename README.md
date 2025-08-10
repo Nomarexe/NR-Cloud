@@ -96,4 +96,4 @@ Il progetto ha già le cartelle pronte:
 2. Controlla che Flask sia installato: `pip show flask`
 3. Se hai Mac M1/M2: potresti dover usare `python3` invece di `python`
 
-**Hai bisogno di aiuto?** Scrivi l'errore esatto che vedi nel terminale e ccerca un video su youtube se non riesci.
+**Hai bisogno di aiuto?** Scrivi l'errore esatto che vedi nel terminale e ccerca un video su youtube se non riesci chiama un tuo amico gamer.
