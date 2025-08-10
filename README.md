@@ -38,7 +38,11 @@
 ### 2. Installa le Cose Necessarie
 Apri il terminale (o Command Prompt su Windows) e scrivi:
 ```
-pip install flask werkzeug
+pip install flask werkzeug requests
+```
+Oppure, per installare tutto in una volta sola:
+```
+pip install -r requirements.txt
 ```
 Aspetta che finisca (ci mette 1-2 minuti)
 
